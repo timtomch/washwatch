@@ -1,5 +1,6 @@
 /* Sensor test sketch
   for more information see http://www.ladyada.net/make/logshield/lighttemp.html
+  Adapted to serve as a first step to try datalogging on the Adafruit SD shield
   */
 
 #define aref_voltage 3.3         // we tie 3.3V to ARef and measure it with a multimeter!
