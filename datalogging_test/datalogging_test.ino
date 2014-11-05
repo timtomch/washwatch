@@ -4,8 +4,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <Wire.h>
-// Without the RTC because it appears to be buggy
-//#include "RTClib.h"
+#include "RTClib.h"
 
 // A simple data logger for the Arduino analog pins
 
@@ -34,7 +33,7 @@ uint32_t syncTime = 0; // time of last sync()
 #define aref_voltage 3.3         // we tie 3.3V to ARef and measure it with a multimeter!
 #define bandgap_voltage 1.1      // this is not super guaranteed but its not -too- off
 
-//RTC_DS1307 RTC; // define the Real Time Clock object
+RTC_DS1307 RTC; // define the Real Time Clock object
 
 // for the data logging shield, we use digital pin 10 for the SD cs line
 const int chipSelect = 10;
@@ -126,7 +125,7 @@ void setup(void)
   
   Serial.print("Logging to: ");
   Serial.println(filename);
-/*
+
   // connect to RTC
   Wire.begin();  
   if (!RTC.begin()) {
@@ -135,7 +134,7 @@ void setup(void)
     Serial.println("RTC failed");
 #endif  //ECHO_TO_SERIAL
   }
-*/  
+  
 
   logfile.println("millis,stamp,datetime,light,temp,vcc");    
 #if ECHO_TO_SERIAL
@@ -164,17 +163,11 @@ void loop(void)
   Serial.print(", ");  
 #endif
 
-/*
-  Serial.print("Trying to link to RTC");
   // fetch the time
-  now = RTC.now();
-  
-  Serial.print("RTC initialized");
+  DateTime now = RTC.now();
   
   // log time
   logfile.print(now.unixtime()); // seconds since 1/1/1970
-  
-  Serial.print("First line printed to logfile");
   
   logfile.print(", ");
   logfile.print('"');
@@ -207,7 +200,7 @@ void loop(void)
   Serial.print(now.second(), DEC);
   Serial.print('"');
 #endif //ECHO_TO_SERIAL
-*/
+
   analogRead(photocellPin);
   delay(10); 
   int photocellReading = analogRead(photocellPin);  
